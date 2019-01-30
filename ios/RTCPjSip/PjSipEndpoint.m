@@ -267,10 +267,13 @@
 
 -(void)useSpeaker {
     self.isSpeaker = true;
-    
+
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [audioSession setActive:YES error:nil];
+
     [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-    
+
     for (NSString *key in self.calls) {
         PjSipCall *call = self.calls[key];
         [self emmitCallChanged:call];
@@ -279,10 +282,12 @@
 
 -(void)useEarpiece {
     self.isSpeaker = false;
-    
+
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [audioSession setActive:YES error:nil];
     [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
-    
+
     for (NSString *key in self.calls) {
         PjSipCall *call = self.calls[key];
         [self emmitCallChanged:call];
